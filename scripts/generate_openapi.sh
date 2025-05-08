@@ -1,10 +1,13 @@
 #!/bin/bash
 set -e
-# === Config ===
-CRD_DIR="../../config/crd"
+
+CRD_DIR="../../../k8s/migration/config/crd"
 CRD_BASES="$CRD_DIR/bases"
 OUTPUT_OPENAPI="./openapi.yaml"
 
+VERSION="${1:-v0.0.0}"
+
+echo "Using version: $VERSION"
 echo "Cleaning previous OpenAPI file..."
 rm -f "$OUTPUT_OPENAPI"
 echo "Building OpenAPI document..."
@@ -12,9 +15,10 @@ cat > "$OUTPUT_OPENAPI" <<EOF
 openapi: 3.0.0
 info:
   title: vJailbreak API's
-  version: v0.1.9
+  version: $VERSION
 paths:
 EOF
+
 
 for file in "$CRD_BASES"/*.yaml; do
   PLURAL=$(yq '.spec.names.plural' "$file")

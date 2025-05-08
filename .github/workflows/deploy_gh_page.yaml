@@ -5,6 +5,8 @@ on:
   # Using a different branch name? Replace `main` with your branch’s name
   push:
     branches: [ main ]
+    tags:
+      - 'v*'
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
     inputs:
@@ -14,7 +16,7 @@ on:
           default: 'main'
 # Allow this job to clone the repo and create a page deployment
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -24,6 +26,33 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+
+      - name: Install yq for OpenAPI generation
+        run: |
+          sudo add-apt-repository ppa:rmescandon/yq -y
+          sudo apt update
+          sudo apt install yq -y
+
+      - name: Set release version
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF##*/}
+          else
+            VERSION=$(jq -r .version < docs/package.json)
+          fi
+          echo "Using version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+
+      - name: Generate openapi.yaml
+        run: |
+          chmod +x scripts/generate_openapi.sh
+          ./scripts/generate_openapi.sh "$VERSION"
+          mkdir -p docs/swagger-ui/$VERSION
+          cp openapi.yaml docs/swagger-ui/$VERSION/openapi.yaml
+          cp -r docs/swagger-ui/template/* docs/swagger-ui/$VERSION/
+
+
       - name: Install, build, and upload your site
         env:
           SITE_URL: ${{ env.SITE_URL }}
