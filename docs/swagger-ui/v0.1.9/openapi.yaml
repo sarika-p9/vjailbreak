@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: vJailbreak API's
-  version: v1
+  version: v0.1.9
 paths:
   /apis/vjailbreak.k8s.pf9.io/v1alpha1/namespaces/{namespace}/migrationplans:
     get:
