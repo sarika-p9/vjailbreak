@@ -12,7 +12,7 @@ cat > "$OUTPUT_OPENAPI" <<EOF
 openapi: 3.0.0
 info:
   title: vJailbreak API's
-  version: v0.1.9
+  version: v0.1.10
 paths:
 EOF
 
