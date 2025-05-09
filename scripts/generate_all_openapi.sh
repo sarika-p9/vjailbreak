@@ -20,10 +20,21 @@ for TAG in $(git tag --sort=-creatordate); do
   if [ -d "$CRD_DIR" ] && [ "$(ls -A $CRD_DIR/*.yaml 2>/dev/null)" ]; then
     echo "$TAG: Folder exists and has YAML files."
 
+    # 1. Generate OpenAPI YAML for this tag
+    chmod +x "$PROJECT_ROOT/scripts/generate_openapi.sh"
+    "$PROJECT_ROOT/scripts/generate_openapi.sh" "$TAG"
+
+    # 2. Prepare output directory
     OUTPUT_DIR="$PROJECT_ROOT/docs/public/swagger-ui/$TAG"
     mkdir -p "$OUTPUT_DIR"
+
+    # 3. Copy Swagger UI template files
     cp -r /tmp/swagger-ui-template/* "$OUTPUT_DIR/"
-    echo "$TAG: Copied Swagger UI template to $OUTPUT_DIR"
+
+    # 4. Copy the generated OpenAPI YAML for this version
+    cp "$PROJECT_ROOT/docs/swagger-ui/$TAG/openapi.yaml" "$OUTPUT_DIR/openapi.yaml"
+
+    echo "$TAG: Copied Swagger UI template and openapi.yaml to $OUTPUT_DIR"
   else
     echo "$TAG: Folder missing or empty."
   fi
