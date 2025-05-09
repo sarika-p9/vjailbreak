@@ -20,4 +20,5 @@ for TAG in $(git tag --sort=-creatordate); do
 done
 
 # Checkout back to your original branch
+git stash --include-untracked
 git checkout "$ORIGINAL_BRANCH"
