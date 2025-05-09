@@ -3,7 +3,8 @@ set -e
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 CRD_DIR="k8s/migration/config/crd/bases"
-TEMPLATE_DIR="$REPO_ROOT/docs/swagger-ui/template"
+# Updated template directory path to root swagger-ui-template folder
+TEMPLATE_DIR="$REPO_ROOT/swagger-ui-template"
 
 ORIGINAL_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
