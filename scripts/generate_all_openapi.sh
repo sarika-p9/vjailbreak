@@ -10,6 +10,7 @@ ORIGINAL_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 # Loop over all tags, checkout, and generate OpenAPI for each
 for TAG in $(git tag --sort=-creatordate); do
   echo "Checking out $TAG"
+  git stash --include-untracked
   git checkout $TAG
   VERSION=$TAG
   chmod +x $PROJECT_ROOT/scripts/generate_openapi.sh
@@ -20,5 +21,5 @@ for TAG in $(git tag --sort=-creatordate); do
 done
 
 # Checkout back to your original branch
-git stash --include-untracked
+
 git checkout "$ORIGINAL_BRANCH"
