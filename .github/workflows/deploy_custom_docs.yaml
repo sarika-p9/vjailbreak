@@ -36,7 +36,7 @@ jobs:
       - name: Set release version
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF##*/}
+            VERSION="${GITHUB_REF##*/}"
           else
             VERSION=$(jq -r .version < docs/package.json)
           fi
@@ -44,13 +44,13 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
 
+
       - name: Generate openapi.yaml
         run: |
           chmod +x scripts/generate_openapi.sh
           ./scripts/generate_openapi.sh "$VERSION"
-          mkdir -p docs/swagger-ui/$VERSION
-          cp openapi.yaml docs/swagger-ui/$VERSION/openapi.yaml
           cp -r docs/swagger-ui/template/* docs/swagger-ui/$VERSION/
+
 
 
       - name: Install, build, and upload your site
