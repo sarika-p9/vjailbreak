@@ -1,11 +1,17 @@
 #!/bin/bash
 set -e
 
-CRD_DIR="../../../k8s/migration/config/crd"
-CRD_BASES="$CRD_DIR/bases"
-OUTPUT_OPENAPI="./openapi.yaml"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$SCRIPT_DIR/.."
 
+CRD_DIR="$PROJECT_ROOT/k8s/migration/config/crd"
+CRD_BASES="$CRD_DIR/bases"
 VERSION="${1:-v0.0.0}"
+
+SWAGGER_OUT_DIR="$PROJECT_ROOT/docs/swagger-ui/$VERSION"
+mkdir -p "$SWAGGER_OUT_DIR"
+
+OUTPUT_OPENAPI="$SWAGGER_OUT_DIR/openapi.yaml"
 
 echo "Using version: $VERSION"
 echo "Cleaning previous OpenAPI file..."
