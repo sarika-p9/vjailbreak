@@ -44,6 +44,18 @@ jobs:
         run: ./scripts/generate_swagger_links.sh
 
 
+      - name: List Swagger UI build output
+        run: ls -alR docs/public/swagger-ui/ || echo "No Swagger UI build output found"
+
+      - name: Check generated Swagger UI links file
+        run: |
+          if [ -f docs/src/content/docs/guides/using_apis.md ]; then
+            head -20 docs/src/content/docs/guides/using_apis.md
+          else
+            echo "File not found: docs/src/content/docs/guides/using_apis.md"
+          fi
+
+
       - name: Install, build, and upload your site
         env:
           SITE_URL: ${{ env.SITE_URL }}
