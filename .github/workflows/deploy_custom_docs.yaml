@@ -50,7 +50,7 @@ jobs:
           chmod +x scripts/generate_openapi.sh
           ./scripts/generate_openapi.sh "$VERSION"
           mkdir -p docs/public/swagger-ui/$VERSION
-          cp openapi.yaml docs/public/swagger-ui/$VERSION/openapi.yaml
+          cp docs/swagger-ui/$VERSION/openapi.yaml docs/public/swagger-ui/$VERSION/openapi.yaml
           cp -r docs/swagger-ui/template/* docs/public/swagger-ui/$VERSION/
 
 
