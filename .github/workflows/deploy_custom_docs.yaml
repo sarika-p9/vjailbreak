@@ -41,7 +41,7 @@ jobs:
           ./scripts/generate_all_openapi.sh
 
       - name: Generate Swagger UI links for all versions
-        run: ./generate_swagger_links.sh
+        run: ./scripts/generate_swagger_links.sh
 
 
       - name: Install, build, and upload your site
