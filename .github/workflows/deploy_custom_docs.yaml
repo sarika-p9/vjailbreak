@@ -53,9 +53,6 @@ jobs:
           cp docs/swagger-ui/$VERSION/openapi.yaml docs/public/swagger-ui/$VERSION/openapi.yaml
           cp -r docs/swagger-ui/template/* docs/public/swagger-ui/$VERSION/
 
-
-
-
       - name: Install, build, and upload your site
         env:
           SITE_URL: ${{ env.SITE_URL }}
