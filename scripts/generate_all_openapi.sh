@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
 
-REPO_ROOT=$(git rev-parse --show-toplevel)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$SCRIPT_DIR/.."
 CRD_DIR="k8s/migration/config/crd/bases"
 # Updated template directory path to root swagger-ui-template folder
-TEMPLATE_DIR="$REPO_ROOT/swagger-ui-template"
+TEMPLATE_DIR="$PROJECT_ROOT/swagger-ui-template"
 
 ORIGINAL_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
