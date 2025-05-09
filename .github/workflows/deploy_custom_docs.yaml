@@ -33,15 +33,14 @@ jobs:
           wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
           chmod +x /usr/local/bin/yq
 
-      - name: Set release version to latest tag
+      - name: Set release version to latest tag or fallback
         id: get_tag
         run: |
-          TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
-          if [ -z "$TAG" ]; then
-            TAG="dev"
-          fi
+          git fetch --tags --force
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "dev")
           echo "Using version: $TAG"
           echo "VERSION=$TAG" >> $GITHUB_ENV
+
 
 
       - name: Generate openapi.yaml
