@@ -17,7 +17,8 @@ for TAG in $(git tag --sort=-creatordate); do
   PROJECT_ROOT=$(git rev-parse --show-toplevel)
   CRD_DIR="$PROJECT_ROOT/k8s/migration/config/crd/bases"
 
-  if [ -d "$CRD_DIR" ] && [ "$(ls -A $CRD_DIR/*.yaml 2>/dev/null)" ]; then
+  # Only proceed if directory exists and contains YAML files
+  if [ -d "$CRD_DIR" ] && ls "$CRD_DIR"/*.yaml >/dev/null 2>&1; then
     echo "$TAG: Folder exists and has YAML files."
 
     # 1. Generate OpenAPI YAML for this tag
@@ -36,7 +37,7 @@ for TAG in $(git tag --sort=-creatordate); do
 
     echo "$TAG: Copied Swagger UI template and openapi.yaml to $OUTPUT_DIR"
   else
-    echo "$TAG: Folder missing or empty."
+    echo "$TAG: Skipping (no CRD YAMLs found)"
   fi
 done
 
