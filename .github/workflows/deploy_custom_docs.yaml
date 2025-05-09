@@ -27,32 +27,22 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
 
       - name: Install yq for OpenAPI generation
         run: |
           wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
           chmod +x /usr/local/bin/yq
 
-      - name: Set release version to latest tag or fallback
-        id: get_tag
+      - name: Generate Swagger UI for all tags
         run: |
-          git fetch --tags --force
-          TAG=$(git tag --sort=-creatordate | head -n 1)
-          if [ -z "$TAG" ]; then
-          TAG="dev"
-          fi
-          echo "Using version: $TAG"
-          echo "VERSION=$TAG" >> $GITHUB_ENV
+          chmod +x scripts/generate_all_openapi.sh
+          ./scripts/generate_all_openapi.sh
 
+      - name: Generate Swagger UI links for all versions
+        run: ./generate_swagger_links.sh
 
-
-      - name: Generate openapi.yaml
-        run: |
-          chmod +x scripts/generate_openapi.sh
-          ./scripts/generate_openapi.sh "$VERSION"
-          mkdir -p docs/public/swagger-ui/$VERSION
-          cp docs/swagger-ui/$VERSION/openapi.yaml docs/public/swagger-ui/$VERSION/openapi.yaml
-          cp -r docs/swagger-ui/template/* docs/public/swagger-ui/$VERSION/
 
       - name: Install, build, and upload your site
         env:
