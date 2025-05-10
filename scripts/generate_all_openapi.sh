@@ -4,7 +4,6 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR/.."
 
-# Copy the template to a safe place before the loop
 cp -r "$PROJECT_ROOT/swagger-ui-template" /tmp/swagger-ui-template
 
 ORIGINAL_BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -17,29 +16,23 @@ for TAG in $(git tag --sort=-creatordate); do
   PROJECT_ROOT=$(git rev-parse --show-toplevel)
   CRD_DIR="$PROJECT_ROOT/k8s/migration/config/crd/bases"
 
-  # Debug: Print directory and files
-  echo "Checking for CRD YAMLs in: $CRD_DIR"
-  ls -l "$CRD_DIR" 2>/dev/null || echo "Directory does not exist"
-  ls "$CRD_DIR"/*.yaml 2>/dev/null || echo "No YAML files found"
+  # Debug output
+  echo "Checking CRD directory: $CRD_DIR"
+  ls -l "$CRD_DIR" 2>/dev/null || echo "Directory missing"
 
-  # Robust check for YAML files
-  if [ -d "$CRD_DIR" ] && compgen -G "$CRD_DIR/*.yaml" > /dev/null; then
-    echo "$TAG: Folder exists and has YAML files."
-
-    # Generate OpenAPI YAML for this tag
+  if [ -d "$CRD_DIR" ] && compgen -G "$CRD_DIR/*.yaml" >/dev/null; then
+    echo "$TAG: Generating OpenAPI..."
+    
+    # Pass PROJECT_ROOT to generate_openapi.sh
     chmod +x "$PROJECT_ROOT/scripts/generate_openapi.sh"
-    "$PROJECT_ROOT/scripts/generate_openapi.sh" "$TAG"
+    "$PROJECT_ROOT/scripts/generate_openapi.sh" "$TAG" "$PROJECT_ROOT"
 
-    # Prepare output directory
     OUTPUT_DIR="$PROJECT_ROOT/docs/public/swagger-ui/$TAG"
     mkdir -p "$OUTPUT_DIR"
-
-    # Copy Swagger UI template and OpenAPI YAML
     cp -r /tmp/swagger-ui-template/* "$OUTPUT_DIR/"
     cp "$PROJECT_ROOT/docs/swagger-ui/$TAG/openapi.yaml" "$OUTPUT_DIR/openapi.yaml"
-    echo "$TAG: Copied Swagger UI template and openapi.yaml to $OUTPUT_DIR"
   else
-    echo "$TAG: Skipping (no CRD YAMLs found)"
+    echo "$TAG: Skipping (no CRDs)"
   fi
 done
 
