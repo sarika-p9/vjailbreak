@@ -7,6 +7,7 @@ PROJECT_ROOT="${2:-$(git rev-parse --show-toplevel)}"  # Use passed root or fall
 CRD_DIR="$PROJECT_ROOT/k8s/migration/config/crd"
 CRD_BASES="$CRD_DIR/bases"
 
+
 SWAGGER_OUT_DIR="$PROJECT_ROOT/docs/swagger-ui/$VERSION"
 mkdir -p "$SWAGGER_OUT_DIR"
 
