@@ -4,11 +4,11 @@ set -e
 VERSION="${1:-v0.0.0}"
 PROJECT_ROOT="${2:-$(git rev-parse --show-toplevel)}"
 
-# Debug: Print paths and files
+# Debug paths
 echo "PROJECT_ROOT: $PROJECT_ROOT"
 CRD_BASES="$PROJECT_ROOT/k8s/migration/config/crd/bases"
 echo "CRD_BASES: $CRD_BASES"
-ls -l "$CRD_BASES"/*.yaml 2>/dev/null || echo "No YAML files in CRD_BASES"
+ls -l "$CRD_BASES"/*.yaml 2>/dev/null || echo "No YAML files found in CRD_BASES"
 
 SWAGGER_OUT_DIR="$PROJECT_ROOT/docs/swagger-ui/$VERSION"
 mkdir -p "$SWAGGER_OUT_DIR"
@@ -29,12 +29,13 @@ EOF
 
 # Loop through CRD YAML files using absolute paths
 for file in "$CRD_BASES"/*.yaml; do
+  echo "Processing file: $file"
   if [ ! -f "$file" ]; then
     echo "⚠️  Skipping $file (not found)"
     continue
   fi
 
-  PLURAL=$(yq '.spec.names.plural' "$file")
+  PLURAL=$(yq '.spec.names.plural' "$file" || { echo "yq failed on $file"; exit 1; })
   KIND=$(yq '.spec.names.kind' "$file" | sed 's/-//g')
   GROUP=$(yq '.spec.group' "$file")
 
@@ -74,7 +75,6 @@ for file in "$CRD_BASES"/*.yaml; do
       responses:
         '204':
           description: Deleted
-
 EOF
 done
 
