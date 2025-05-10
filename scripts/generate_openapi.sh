@@ -2,15 +2,13 @@
 set -e
 
 VERSION="${1:-v0.0.0}"
-PROJECT_ROOT="${2:-$(git rev-parse --show-toplevel)}"  # Use passed root or fallback
-
-CRD_DIR="$PROJECT_ROOT/k8s/migration/config/crd"
-CRD_BASES="$CRD_DIR/bases"
+PROJECT_ROOT="${2:-$(git rev-parse --show-toplevel)}"
 
 # Debug: Print paths and files
 echo "PROJECT_ROOT: $PROJECT_ROOT"
+CRD_BASES="$PROJECT_ROOT/k8s/migration/config/crd/bases"
 echo "CRD_BASES: $CRD_BASES"
-ls -l "$CRD_BASES" 2>/dev/null || echo "CRD_BASES directory does not exist"
+ls -l "$CRD_BASES"/*.yaml 2>/dev/null || echo "No YAML files in CRD_BASES"
 
 SWAGGER_OUT_DIR="$PROJECT_ROOT/docs/swagger-ui/$VERSION"
 mkdir -p "$SWAGGER_OUT_DIR"
