@@ -25,7 +25,9 @@ for TAG in $(git tag --sort=-creatordate); do
     
     # Pass PROJECT_ROOT to generate_openapi.sh
     chmod +x "$PROJECT_ROOT/scripts/generate_openapi.sh"
+    # Inside the loop:
     "$PROJECT_ROOT/scripts/generate_openapi.sh" "$TAG" "$PROJECT_ROOT"
+
 
     OUTPUT_DIR="$PROJECT_ROOT/docs/public/swagger-ui/$TAG"
     mkdir -p "$OUTPUT_DIR"

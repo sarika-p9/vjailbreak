@@ -29,12 +29,12 @@ EOF
 
 # Loop through CRD YAML files using absolute paths
 for file in "$CRD_BASES"/*.yaml; do
-  echo "Processing file: $file"
   if [ ! -f "$file" ]; then
     echo "⚠️  Skipping $file (not found)"
     continue
   fi
 
+  echo "Processing file: $file"
   PLURAL=$(yq '.spec.names.plural' "$file" || { echo "yq failed on $file"; exit 1; })
   KIND=$(yq '.spec.names.kind' "$file" | sed 's/-//g')
   GROUP=$(yq '.spec.group' "$file")
