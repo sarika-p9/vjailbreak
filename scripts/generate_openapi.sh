@@ -4,7 +4,6 @@ set -e
 VERSION="${1:-v0.0.0}"
 PROJECT_ROOT="${2:-$(git rev-parse --show-toplevel)}"
 
-# Debug paths
 echo "PROJECT_ROOT: $PROJECT_ROOT"
 CRD_BASES="$PROJECT_ROOT/k8s/migration/config/crd/bases"
 echo "CRD_BASES: $CRD_BASES"
