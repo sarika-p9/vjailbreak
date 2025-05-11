@@ -1,9 +1,13 @@
 #!/bin/bash
 set -e
 
+# Enable critical shell options for glob handling
+shopt -s nullglob extglob
+
 VERSION="${1:-v0.0.0}"
 PROJECT_ROOT="${2:-$(git rev-parse --show-toplevel)}"
 
+# Debug paths
 echo "PROJECT_ROOT: $PROJECT_ROOT"
 CRD_BASES="$PROJECT_ROOT/k8s/migration/config/crd/bases"
 echo "CRD_BASES: $CRD_BASES"
@@ -33,9 +37,9 @@ for file in $CRD_BASES/*.yaml; do
     echo "⚠️  Skipping $file (not found)"
     continue
   fi
-  PLURAL=$(yq '.spec.names.plural' "$file") || { echo "Failed to process $file"; exit 1; }
-  KIND=$(yq '.spec.names.kind' "$file" | sed 's/-//g')
-  GROUP=$(yq '.spec.group' "$file")
+  PLURAL=$(/usr/local/bin/yq '.spec.names.plural' "$file") || { echo "Failed to process $file"; exit 1; }
+  KIND=$(/usr/local/bin/yq '.spec.names.kind' "$file" | sed 's/-//g')
+  GROUP=$(/usr/local/bin/yq '.spec.group' "$file")
 
   echo "  Adding REST paths for: $PLURAL"
 
@@ -85,8 +89,8 @@ for file in $CRD_BASES/*.yaml; do
     continue
   fi
   echo "Processing schema for file: $file"
-  NAME=$(yq '.metadata.name' "$file" | cut -d'.' -f1 | sed 's/-//g')
-  SCHEMA=$(yq -o=json '.spec.versions[0].schema.openAPIV3Schema' "$file")
+  NAME=$(/usr/local/bin/yq '.metadata.name' "$file" | cut -d'.' -f1 | sed 's/-//g')
+  SCHEMA=$(/usr/local/bin/yq -o=json '.spec.versions[0].schema.openAPIV3Schema' "$file")
 
   if [ -z "$SCHEMA" ] || [ "$SCHEMA" == "null" ]; then
     echo "⚠️  Skipping $file (no schema)"
@@ -95,7 +99,7 @@ for file in $CRD_BASES/*.yaml; do
 
   echo "  📦 Adding schema: $NAME"
   echo "    $NAME:" >> "$OUTPUT_OPENAPI"
-  echo "$SCHEMA" | yq -P | sed 's/^/      /' >> "$OUTPUT_OPENAPI"
+  echo "$SCHEMA" | /usr/local/bin/yq -P | sed 's/^/      /' >> "$OUTPUT_OPENAPI"
 done
 
 echo "OpenAPI written to $OUTPUT_OPENAPI"
