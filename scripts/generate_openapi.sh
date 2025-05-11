@@ -4,11 +4,10 @@ set -e
 VERSION="${1:-v0.0.0}"
 PROJECT_ROOT="${2:-$(git rev-parse --show-toplevel)}"
 
+# Debug paths
 echo "PROJECT_ROOT: $PROJECT_ROOT"
 CRD_BASES="$PROJECT_ROOT/k8s/migration/config/crd/bases"
 echo "CRD_BASES: $CRD_BASES"
-pwd
-
 ls -l $CRD_BASES/*.yaml 2>/dev/null || echo "No YAML files found in CRD_BASES"
 
 SWAGGER_OUT_DIR="$PROJECT_ROOT/docs/swagger-ui/$VERSION"
@@ -28,14 +27,13 @@ info:
 paths:
 EOF
 
-# Loop through CRD YAML files using absolute paths (NO quotes on glob!)
+# Loop through CRD YAML files using absolute paths (NO QUOTES on glob!)
 for file in $CRD_BASES/*.yaml; do
-  pwd
+  echo "Processing file: $file"
   if [ ! -f "$file" ]; then
     echo "⚠️  Skipping $file (not found)"
     continue
   fi
-  echo "Processing file: $file"
   PLURAL=$(yq '.spec.names.plural' "$file") || { echo "Failed to process $file"; exit 1; }
   KIND=$(yq '.spec.names.kind' "$file" | sed 's/-//g')
   GROUP=$(yq '.spec.group' "$file")
@@ -76,7 +74,6 @@ for file in $CRD_BASES/*.yaml; do
       responses:
         '204':
           description: Deleted
-
 EOF
 done
 
@@ -88,7 +85,7 @@ for file in $CRD_BASES/*.yaml; do
   if [ ! -f "$file" ]; then
     continue
   fi
-  echo "Processing file for schema: $file"
+  echo "Processing schema for file: $file"
   NAME=$(yq '.metadata.name' "$file" | cut -d'.' -f1 | sed 's/-//g')
   SCHEMA=$(yq -o=json '.spec.versions[0].schema.openAPIV3Schema' "$file")
 
