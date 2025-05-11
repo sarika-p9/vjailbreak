@@ -10,6 +10,11 @@ cp -r "$PROJECT_ROOT/swagger-ui-template" /tmp/
 
 ORIGINAL_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
+# Persistent output directory
+BUILD_OUTPUT="/tmp/swagger-ui-build"
+rm -rf "$BUILD_OUTPUT"
+mkdir -p "$BUILD_OUTPUT"
+
 for TAG in $(git tag --sort=-creatordate); do
   git stash --include-untracked
   git checkout $TAG
@@ -25,7 +30,7 @@ for TAG in $(git tag --sort=-creatordate); do
     chmod +x /tmp/generate_openapi.sh
     /tmp/generate_openapi.sh "$TAG" "$PROJECT_ROOT"
 
-    OUTPUT_DIR="$PROJECT_ROOT/docs/public/swagger-ui/$TAG"
+    OUTPUT_DIR="$BUILD_OUTPUT/$TAG"
     mkdir -p "$OUTPUT_DIR"
     cp -r /tmp/swagger-ui-template/* "$OUTPUT_DIR/"
     cp "$PROJECT_ROOT/docs/swagger-ui/$TAG/openapi.yaml" "$OUTPUT_DIR/openapi.yaml"
@@ -34,4 +39,12 @@ for TAG in $(git tag --sort=-creatordate); do
   fi
 done
 
+# Switch back to the original branch
 git checkout "$ORIGINAL_BRANCH"
+
+# Now copy all generated folders into the real output directory
+rm -rf "$PROJECT_ROOT/docs/public/swagger-ui"
+mkdir -p "$PROJECT_ROOT/docs/public/swagger-ui"
+cp -r /tmp/swagger-ui-build/* "$PROJECT_ROOT/docs/public/swagger-ui/"
+
+echo "All Swagger UI versions copied to docs/public/swagger-ui/"
