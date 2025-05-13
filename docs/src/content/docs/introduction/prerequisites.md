@@ -63,7 +63,24 @@ Please refer the following table for the required ports:
 | 5480 | TCP | PCD nodes | VMware vCenter API endpoint | VMware Site Recovery Manager Appliance Management Interface |
 
 ### What network connectivity do I need for vJailbreak?
-The vJailbreak VM and any helper nodes must be able to resolve & connect to your VMware vCenter environment and all ESXi hosts, and must be able to resolve & connect to [quay.io](quay.io).
+
+The vJailbreak VM and any helper nodes must be able to resolve & connect to your VMware vCenter environment and all ESXi hosts, and must be able to resolve & connect to [quay.io](https://quay.io).
+
+For a comprehensive list of network connectivity requirements, especially in restricted environments, refer to the table below:
+
+| **Component/Service**                              | **Port**       | **Protocol**      | **Source**                     | **Destination**                          | **Purpose**                                                                 |
+|----------------------------------------------------|----------------|-------------------|--------------------------------|------------------------------------------|-----------------------------------------------------------------------------|
+| **VMware & OpenStack API Endpoints**               | 443            | TCP (TLS)         | vJailbreak/agent, PCD nodes    | vCenter, ESXi, OpenStack API endpoints   | Fetch certificates and communicate with REST APIs for migration operations. |
+| **Cloud-init Certificate Retrieval**               | 443            | TCP (TLS)         | Helper VM                      | Configured FQDN                          | Retrieve certificates during VM initialization (runs `openssl s_client -connect <FQDN>:443` inside helper VM). |
+| **Virtio Driver ISO Download**                     | 443            | TCP (HTTPS)       | vJailbreak/agent               | fedorapeople.org (or custom URL)         | Download virtio driver ISO for Windows guest migration (default URL set via CLI flag). |
+| **OpenStack Metadata Service**                     | 80             | TCP (HTTP)        | Helper VM                      | 169.254.169.254                          | Access instance metadata during helper boot in OpenStack.                  |
+| **Health-Check Probe to Migrated Guest**           | User-defined   | TCP (HTTP/HTTPS)  | vJailbreak/agent               | Migrated guest VM                        | Perform health-checks on migrated VMs via HTTP or HTTPS probes.            |
+| **External Tooling/Installers**                    | 443            | TCP (HTTPS)       | vJailbreak/agent               | Internet (e.g., S3, GitHub raw URLs)     | Download scripts and manifests (e.g., Prometheus, cert-manager) for setup. |
+| **K3s Install Script**                             | 443            | TCP (HTTPS)       | vJailbreak/agent               | get.k3s.io and related endpoints         | Download and install K3s and dependencies for Kubernetes setup.            |
+| **ICMP Echo (Ping)**                               | N/A            | ICMP              | vJailbreak/agent               | Guest VM IPs                             | Connectivity checks to guest IPs during migration.                         |
+
+*Note:* Some endpoints and requirements (e.g., specific URLs for virtio ISO or K3s) may vary based on configuration or version updates. Users in restricted environments should ensure all listed connections are permitted and consult with network administrators if needed.
+
 
 ### Required Ingress Rules for Kubernetes Node with Kubelet, Metrics Server, and Prometheus
 
