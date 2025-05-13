@@ -67,18 +67,68 @@ Please refer the following table for the required ports:
 
 The vJailbreak VM and any helper nodes must be able to resolve & connect to your VMware vCenter environment and all ESXi hosts, and must be able to resolve & connect to [quay.io](https://quay.io).
 
-For a comprehensive list of network connectivity requirements, especially in restricted environments, refer to the table below:
+For a comprehensive list of network connectivity requirements, especially in restricted environments, refer to the following:
 
-| **Component/Service** | **Port** | **Protocol** | **Source** | **Destination** | **Purpose** |
-|-----------------------|----------|--------------|------------|-----------------|-------------|
-| VMware & OpenStack API Endpoints | 443 | TCP (TLS) | vJailbreak/agent, PCD nodes | vCenter, ESXi, OpenStack API endpoints | Fetch certificates and communicate with REST APIs for migration operations. |
-| Cloud-init Certificate Retrieval | 443 | TCP (TLS) | Helper VM | Configured FQDN | Retrieve certificates during VM initialization (`openssl s_client -connect <FQDN>:443`). |
-| Virtio Driver ISO Download | 443 | TCP (HTTPS) | vJailbreak/agent | fedorapeople.org (or custom URL) | Download virtio driver ISO for Windows guest migration (set via CLI flag). |
-| OpenStack Metadata Service | 80 | TCP (HTTP) | Helper VM | 169.254.169.254 | Access instance metadata during helper boot in OpenStack. |
-| Health-Check Probe to Migrated Guest | User-defined | TCP (HTTP/HTTPS) | vJailbreak/agent | Migrated guest VM | Perform HTTP/HTTPS health checks on migrated VMs. |
-| External Tooling/Installers | 443 | TCP (HTTPS) | vJailbreak/agent | Internet (e.g., S3, GitHub raw URLs) | Download scripts and manifests (e.g., Prometheus, cert-manager). |
-| K3s Install Script | 443 | TCP (HTTPS) | vJailbreak/agent | get.k3s.io and related endpoints | Download and install K3s and dependencies for Kubernetes setup. |
-| ICMP Echo (Ping) | N/A | ICMP | vJailbreak/agent | Guest VM IPs | Check IP connectivity to guest VMs during migration. |
+---
+
+#### VMware & OpenStack – TLS on port 443
+- **Direction**: `vJailbreak/agent` → `host:443` (TCP)
+- **Protocol**: TLS (`tls.Dial("tcp", host+":443", ...)`)
+- **Source Files**:
+  - `k8s/migration/pkg/utils/credutils.go`
+  - `v2v-helper/openstack/openstackops.go`
+  - `v2v-helper/vcenter/vcenterops.go`
+- **Purpose**: Fetch certificates or communicate with REST APIs (vCenter, ESXi, OpenStack)
+
+---
+
+#### Cloud-init Certificate Retrieval – TLS on port 443
+- **Runs in**: Helper VM
+- **Command**: `openssl s_client -connect <FQDN>:443`
+- **Source File**: `k8s/migration/pkg/scripts/cloud-init.tmpl.yaml`
+
+---
+
+#### Virtio Driver ISO Download – HTTPS on port 443
+- **Default URL**:  
+  https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+- **References**:
+  - `k8s/migration/internal/controller/migrationplan_controller.go`
+  - `v2v-cli/cmd/root.go` (flag default)
+
+---
+
+#### OpenStack Metadata Service – HTTP on port 80
+- **Accessed by**: Helper VM on boot
+- **URL**: `http://169.254.169.254/openstack/latest/network_data.json`
+- **File**: `k8s/migration/pkg/utils/vjailbreaknodeutils.go`
+
+---
+
+#### Health-Check Probe to Migrated Guest – HTTP/HTTPS (custom port)
+- **Endpoint Attempted**: `http://<ip>:<port>`; fallback to `https://<ip>:<port>`
+- **Source**: `v2v-helper/migrate/migrate.go`
+
+---
+
+#### External Tooling / Installers – HTTPS on port 443
+- **Used For**:
+  - Cloud-CTL setup script
+  - Prometheus-operator and cert-manager manifests pulled from GitHub
+- **Source**: `k8s/migration/pkg/constants/constants.go`
+- **Example**:  
+  `https://cloud-ctl.s3.us-west-1.amazonaws.com/cloud-ctl-setup | bash`
+
+---
+
+#### K3s Install Script – HTTPS on port 443
+- **Endpoint**: `get.k3s.io` and related URLs
+
+---
+
+#### ICMP Echo (Ping)
+- **Purpose**: Connectivity checks to migrated guest VMs
+- **Source**: `v2v-helper/migrate/migrate.go` (uses `go-ping`)
 
 
 *Note:* Some endpoints and requirements (e.g., specific URLs for virtio ISO or K3s) may vary based on configuration or version updates. Users in restricted environments should ensure all listed connections are permitted and consult with network administrators if needed.
