@@ -113,7 +113,7 @@ For a comprehensive list of network connectivity requirements, especially in res
 
 #### External Tooling / Installers – HTTPS on port 443
 - **Used For**:
-  - Cloud-CTL setup script
+  - Cloud-ctl setup script
   - Prometheus-operator and cert-manager manifests pulled from GitHub
 - **Source**: `k8s/migration/pkg/constants/constants.go`
 - **Example**:  
@@ -123,6 +123,11 @@ For a comprehensive list of network connectivity requirements, especially in res
 
 #### K3s Install Script – HTTPS on port 443
 - **Endpoint**: `get.k3s.io` and related URLs
+- **Purpose**: Download and install K3s along with its dependencies for Kubernetes setup
+- **Source File(s)**:
+  - `k8s/migration/internal/controller/migrationplan_controller.go`
+  - CLI or internal modules may invoke the script as part of cluster bring-up
+- **Details**: The install script fetches K3s binaries and bootstrap components over HTTPS. Ensure internet access is available to these domains if you're running in a restricted environment.
 
 ---
 
