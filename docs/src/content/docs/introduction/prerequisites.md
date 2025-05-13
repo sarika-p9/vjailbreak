@@ -62,6 +62,7 @@ Please refer the following table for the required ports:
 | 902 | TCP | PCD nodes | VMware ESXi hosts | Disk transfer data copy |
 | 5480 | TCP | PCD nodes | VMware vCenter API endpoint | VMware Site Recovery Manager Appliance Management Interface |
 
+
 ### What network connectivity do I need for vJailbreak?
 
 The vJailbreak VM and any helper nodes must be able to resolve & connect to your VMware vCenter environment and all ESXi hosts, and must be able to resolve & connect to [quay.io](https://quay.io).
@@ -80,6 +81,7 @@ For a comprehensive list of network connectivity requirements, especially in res
 | **ICMP Echo (Ping)**                               | N/A            | ICMP              | vJailbreak/agent               | Guest VM IPs                             | Connectivity checks to guest IPs during migration.                         |
 
 *Note:* Some endpoints and requirements (e.g., specific URLs for virtio ISO or K3s) may vary based on configuration or version updates. Users in restricted environments should ensure all listed connections are permitted and consult with network administrators if needed.
+
 
 
 ### Required Ingress Rules for Kubernetes Node with Kubelet, Metrics Server, and Prometheus
