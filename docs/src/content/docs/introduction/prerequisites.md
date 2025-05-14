@@ -67,16 +67,20 @@ Please refer the following table for the required ports:
 
 <!-- The vJailbreak VM and any helper nodes must be able to resolve & connect to your VMware vCenter environment and all ESXi hosts, and must be able to resolve & connect to [quay.io](https://quay.io). -->
 
-The vJailbreak VM and any helper nodes must be able to resolve and connect to the following endpoints to perform migrations successfully:
+The vJailbreak VM and any helper nodes must be able to resolve and connect to the following:
 
-- **vCenter, ESXi, and OpenStack API endpoints** on port **443 (TCP)**  
-- **Cloud-init FQDNs** on port **443 (TCP)**  
-- **Virtio ISO download source** (e.g., fedorapeople.org or a custom URL) on port **443 (TCP)**  
-- **OpenStack metadata service** at `169.254.169.254` on port **80 (TCP)**  
-- **Migrated guest VMs** over **custom HTTP/HTTPS ports** for health checks  
-- **External sources** (e.g., GitHub, S3) over port **443 (TCP)** for downloading tooling and manifests  
-- **K3s installation sources** (e.g., `get.k3s.io`) over port **443 (TCP)**  
-- **Guest VM IPs** using **ICMP (ping)** for connectivity verification
+- **vCenter, ESXi, and OpenStack API endpoints** — required for API-based communication during migration.
+- **Cloud-init certificate endpoints** — exact URLs must be accessible from the helper VM during initialization:
+  - `https://<FQDN>:443` (used by `openssl s_client -connect`)
+- **Virtio ISO download source** — required when migrating Windows guests:
+  - `https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso`
+- **Health-check access to migrated guest VMs** — over user-defined HTTP/HTTPS endpoints for post-migration validation.
+- **External tooling sources** — required for downloading setup scripts and manifests:
+  - `https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/bundle.yaml`
+  - `https://raw.githubusercontent.com/cert-manager/cert-manager/release-1.12/deploy/manifests/cert-manager.yaml`
+- **K3s installation script** — used during cluster provisioning:
+  - `https://get.k3s.io`
+- **Guest VM ICMP (ping)** — required for basic connectivity checks after migration.
 
 > **Note:** Ensure all the above access is allowed through your firewall and proxy settings, especially in restricted environments.
 
