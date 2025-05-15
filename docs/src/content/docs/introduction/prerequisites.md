@@ -67,29 +67,24 @@ Please refer the following table for the required ports:
 
 <!-- The vJailbreak VM and any helper nodes must be able to resolve & connect to your VMware vCenter environment and all ESXi hosts, and must be able to resolve & connect to [quay.io](https://quay.io). -->
 
-### What network connectivity do I need for vJailbreak?
-
 The vJailbreak VM and any helper nodes must be able to resolve and connect to the following:
 
-- **vCenter, ESXi, and OpenStack API endpoints** — required for API-based communication during migration.
-- **Cloud-init certificate endpoints** — exact URLs must be accessible from the helper VM during initialization:
-  - `https://<FQDN>:443` (used by `openssl s_client -connect`)
-- **Virtio ISO download source** — required when migrating Windows guests:
-  - `https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso`
-- **Health-check access to migrated guest VMs** — over user-defined HTTP/HTTPS endpoints for post-migration validation.
-- **External tooling sources** — required for downloading setup scripts and manifests:
-  - `https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/bundle.yaml`
-  - `https://raw.githubusercontent.com/cert-manager/cert-manager/release-1.12/deploy/manifests/cert-manager.yaml`
-- **K3s installation script** — used during cluster provisioning:
-  - `https://get.k3s.io`
-- **Container registries for vJailbreak components and dependencies** — required for pulling K3s images and other workloads:
-  - `docker.io`
-  - `ghcr.io`
-  - Other registries referenced in Helm charts or deployment manifests (e.g., for Prometheus, Grafana, vJailbreak controller and UI)
-- **Guest VM ICMP (ping)** — required for basic connectivity checks after migration.
-
-> **Note:** When the vJailbreak VM starts, it installs K3s on first boot. K3s pulls its own container images for its internal components. Additional services like the vJailbreak controller, UI, Prometheus, and Grafana are then installed using YAML files or Helm charts. These components require access to various public container registries. In restricted environments, failure to access these registries will prevent successful setup.
-
+- **vCenter, ESXi, and OpenStack API endpoints** — required for API communication.
+- **Cloud-init certificate endpoints**:
+  - [`https://<FQDN>:443`](https://<FQDN>)
+- **Virtio ISO download source**:
+  - [https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso)
+- **Health-check endpoints on migrated guest VMs** — over user-defined HTTP/HTTPS ports.
+- **External tooling sources**:
+  - [https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/bundle.yaml](https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/bundle.yaml)
+  - [https://raw.githubusercontent.com/cert-manager/cert-manager/release-1.12/deploy/manifests/cert-manager.yaml](https://raw.githubusercontent.com/cert-manager/cert-manager/release-1.12/deploy/manifests/cert-manager.yaml)
+- **K3s installation source**:
+  - [https://get.k3s.io](https://get.k3s.io)
+- **Container registries required to pull images** — needed for K3s and vJailbreak components such as controller, UI, Prometheus, and Grafana:
+  - [https://docker.io](https://docker.io)
+  - [https://ghcr.io](https://ghcr.io)
+  - Other public registries referenced in deployment manifests
+- **ICMP (ping) access to guest VM IPs** — for connectivity verification
 
 
 
