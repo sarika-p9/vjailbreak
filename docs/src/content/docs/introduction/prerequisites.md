@@ -71,7 +71,7 @@ The vJailbreak VM and any helper nodes must be able to resolve and connect to th
 
 - **vCenter, ESXi, and OpenStack API endpoints** — required for API communication.
 - **Cloud-init certificate endpoints**:
-  - [`https://<FQDN>:443`](https://<FQDN>)
+- [`https://<FQDN>:443`](https://<FQDN>) — the FQDN is typically the hostname or IP of the VM where vJailbreak is deployed, used to retrieve certificates during cloud-init.
 - **Virtio ISO download source**:
   - [https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso)
 - **Health-check endpoints on migrated guest VMs** — over user-defined HTTP/HTTPS ports.
@@ -83,7 +83,8 @@ The vJailbreak VM and any helper nodes must be able to resolve and connect to th
 - **Container registries required to pull images** — needed for K3s and vJailbreak components such as controller, UI, Prometheus, and Grafana:
   - [https://docker.io](https://docker.io)
   - [https://ghcr.io](https://ghcr.io)
-  - Other public registries referenced in deployment manifests
+  - [https://quay.io](https://quay.io)
+  - [https://registry.k8s.io](https://registry.k8s.io)
 - **ICMP (ping) access to guest VM IPs** — for connectivity verification
 
 
