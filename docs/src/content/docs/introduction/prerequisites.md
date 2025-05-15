@@ -77,7 +77,7 @@ The vJailbreak VM and any helper nodes must be able to resolve and connect to th
 - **Health-check endpoints on migrated guest VMs** — over user-defined HTTP/HTTPS ports.
 - **External tooling sources**:
   - [https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/bundle.yaml](https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/bundle.yaml)
-  - [https://raw.githubusercontent.com/cert-manager/cert-manager/release-1.12/deploy/manifests/cert-manager.yaml](https://raw.githubusercontent.com/cert-manager/cert-manager/release-1.12/deploy/manifests/cert-manager.yaml)
+- [https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml](https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml)
 - **K3s installation source**:
   - [https://get.k3s.io](https://get.k3s.io)
 - **Container registries required to pull images** — needed for K3s and vJailbreak components such as controller, UI, Prometheus, and Grafana:
