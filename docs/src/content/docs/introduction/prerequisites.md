@@ -67,6 +67,8 @@ Please refer the following table for the required ports:
 
 <!-- The vJailbreak VM and any helper nodes must be able to resolve & connect to your VMware vCenter environment and all ESXi hosts, and must be able to resolve & connect to [quay.io](https://quay.io). -->
 
+### What network connectivity do I need for vJailbreak?
+
 The vJailbreak VM and any helper nodes must be able to resolve and connect to the following:
 
 - **vCenter, ESXi, and OpenStack API endpoints** — required for API-based communication during migration.
@@ -80,9 +82,14 @@ The vJailbreak VM and any helper nodes must be able to resolve and connect to th
   - `https://raw.githubusercontent.com/cert-manager/cert-manager/release-1.12/deploy/manifests/cert-manager.yaml`
 - **K3s installation script** — used during cluster provisioning:
   - `https://get.k3s.io`
+- **Container registries for vJailbreak components and dependencies** — required for pulling K3s images and other workloads:
+  - `docker.io`
+  - `ghcr.io`
+  - Other registries referenced in Helm charts or deployment manifests (e.g., for Prometheus, Grafana, vJailbreak controller and UI)
 - **Guest VM ICMP (ping)** — required for basic connectivity checks after migration.
 
-> **Note:** Ensure all the above access is allowed through your firewall and proxy settings, especially in restricted environments.
+> **Note:** When the vJailbreak VM starts, it installs K3s on first boot. K3s pulls its own container images for its internal components. Additional services like the vJailbreak controller, UI, Prometheus, and Grafana are then installed using YAML files or Helm charts. These components require access to various public container registries. In restricted environments, failure to access these registries will prevent successful setup.
+
 
 
 
