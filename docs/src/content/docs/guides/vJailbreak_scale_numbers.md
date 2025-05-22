@@ -1,4 +1,8 @@
-# vJailbreak Scale Numbers
+---
+title: vJailbreak Scale Numbers
+description: Empirical scale and performance results for vJailbreak migrations.
+date: 2025-05-23
+---
 
 ## 1. Assumptions
 
