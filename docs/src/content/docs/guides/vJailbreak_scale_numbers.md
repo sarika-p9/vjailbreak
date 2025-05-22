@@ -4,61 +4,9 @@ description: Empirical scale and performance results for vJailbreak migrations.
 date: 2025-05-23
 ---
 
-## 1. Assumptions
+This document provides a comprehensive overview of vJailbreak migration performance, outlining key assumptions such as network bandwidth, and presenting detailed measurements for both single and multiple VM migrations. It includes analysis of memory, CPU, and network usage at both the node and migration levels, reporting average and peak values. Recommendations are offered for optimal migration agent sizing, along with estimates of the number of concurrent migrations supported per agent. The document also examines how migration time correlates with VM size and identifies the primary factors affecting migration performance, including network capacity, CPU availability, and memory resources.
 
-- Network bandwidth, etc.
 
----
-
-## 2. One VM - time
-
----
-
-## 3. Multiple VMs - time
-
----
-
-## 4. Memory usage per Node and total
-
----
-
-## 5. CPU usage per Node and total
-
----
-
-## 6. Network usage per node and total
-
----
-
-## 7. Memory usage per Migration (avg and peak)
-
----
-
-## 8. CPU usage per Migration (avg and peak)
-
----
-
-## 9. Network usage Migration (avg and peak)
-
----
-
-## 10. Recommendation for migration agent size
-
----
-
-## 11. How many migrations per agent of recommended size (depend on 7,6)
-
----
-
-## 12. Time for one migration (co-relate with VM size)
-
----
-
-## 13. Factors affecting migration time
-
-- Network
-- CPU
-- Memory
 
 ---
 
