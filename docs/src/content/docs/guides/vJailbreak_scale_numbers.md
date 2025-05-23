@@ -10,9 +10,9 @@ This document provides a comprehensive overview of vJailbreak migration performa
 
 ---
 
-## vJailbreak VM Configuration
+### vJailbreak VM Configuration
 
-- 8 vCPU, 20 GB memory.
+8 vCPU, 20 GB memory.
 
 ---
 
@@ -23,7 +23,8 @@ This document provides a comprehensive overview of vJailbreak migration performa
 ### 1. Single VM Migration
 
 - VM Configuration: CentOS, 4GB Memory, 1 vCPU, 16GB Hard Disk
-- CPU Usage:  
+- CPU Usage:
+  ![CPU Usage Graph](../../../assets/singlevm_cpu.png "Single VM CPU Usage")  
   Peak CPU Usage: 13.5%
 - Memory Usage:  
   Peak memory usage: 9.03%
