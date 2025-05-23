@@ -26,7 +26,8 @@ This document provides a comprehensive overview of vJailbreak migration performa
 - CPU Usage:
   ![CPU Usage Graph](../../../assets/singlevm_cpu.png "Single VM CPU Usage")  
   Peak CPU Usage: 13.5%
-- Memory Usage:  
+- Memory Usage: 
+  ![Memory Usage Graph](../../../assets/singlevm_memory.png "Single VM Memory Usage")
   Peak memory usage: 9.03%
 - Time Taken: 3 minutes 23 seconds
 
@@ -35,8 +36,10 @@ This document provides a comprehensive overview of vJailbreak migration performa
 ### 2. Two Concurrent VM Migrations
 
 - VM Configuration: Same as above (x2)
-- CPU & Memory Usage:  
-  Peak CPU usage: 36.2%  
+- CPU & Memory Usage:
+  ![CPU Usage Graph](../../../assets/two_concurrent_cpu.png "Two Concurrent VM CPU Usage")  
+  Peak CPU usage: 36.2%
+  ![Memory Usage Graph](../../../assets/two_concurrent_memory.png "Two Concurrent VM Memory Usage")  
   Peak Memory usage: 13.8%
 - Time Taken:  
   - VM 1: 3 minutes 49 seconds  
@@ -48,8 +51,10 @@ This document provides a comprehensive overview of vJailbreak migration performa
 ### 3. Three Concurrent VM Migrations
 
 - VM Configuration: Same as above (x3)
-- CPU & Memory Usage:  
-  Peak CPU usage: 43.5%  
+- CPU & Memory Usage:
+  ![CPU Usage Graph](../../../assets/three_concurrent_cpu.png "Three Concurrent VM CPU Usage")  
+  Peak CPU usage: 43.5%
+  ![Memory Usage Graph](../../../assets/three_concurrent_memory.png "Three Concurrent VM Memory Usage")  
   Peak memory Usage: 18.2%
 - Time Taken:  
   - VM 1: 4 minutes 11 seconds  
@@ -62,9 +67,12 @@ This document provides a comprehensive overview of vJailbreak migration performa
 ### 4. Four Concurrent VM Migrations
 
 - VM Configuration: Same as above (x4)
-- CPU & Memory Usage:  
-  Peak cpu usage: 60.4%  
+- CPU & Memory Usage:
+  ![CPU Usage Graph](../../../assets/four_concurrent_cpu.png "Four Concurrent VM CPU Usage")    
+  Peak cpu usage: 60.4% 
+  ![Memory Usage Graph](../../../assets/four_concurrent_memory.png "Four Concurrent VM Memory Usage") 
   Peak memory usage: 23.7%
+  
 - Time Taken:  
   - VM 1: 4 minutes 55 seconds  
   - VM 2: 4 minutes 45 seconds  
@@ -78,7 +86,9 @@ This document provides a comprehensive overview of vJailbreak migration performa
 
 - VM Configuration: Same as above (x6)
 - CPU & Memory Usage:  
-  Peak cpu usage: 90%  
+  ![CPU Usage Graph](../../../assets/six_concurrent_cpu.png "Six Concurrent VM CPU Usage") 
+  Peak cpu usage: 90%
+  ![Memory Usage Graph](../../../assets/six_concurrent_memory.png "Six Concurrent VM Memory Usage")   
   Peak memory usage: 24.8%
 - Time Taken:  
   - VM 1: 5 minutes 47 seconds  
@@ -91,6 +101,8 @@ This document provides a comprehensive overview of vJailbreak migration performa
 
 ---
 
+
+
 ## Analysis of CentOS VM Migrations
 
 The data indicates that as the number of concurrent VM migrations increases, the time taken for each migration also increases. This is likely due to increased resource contention (CPU, memory, and network) on the node. The observation that CPU utilization is generally higher than memory utilization suggests that the migrations are more CPU-bound than memory-bound in this specific environment.
@@ -99,7 +111,8 @@ The data indicates that as the number of concurrent VM migrations increases, the
 
 ### 1. Single Windows VM Migration
 
-- CPU & Memory Usage:  
+- CPU & Memory Usage:
+   ![CPU Usage Graph](../../../assets/single_windows_cpu.png "Single VM CPU Usage") 
   Peak cpu usage: 8.95%
 - Time Taken: 10 minutes 19 seconds  
 - Average Time Taken: 10 minutes 19 seconds
@@ -108,9 +121,11 @@ The data indicates that as the number of concurrent VM migrations increases, the
 
 ### 2. Six Concurrent Windows VM Migrations
 
-- CPU & Memory Usage:  
-  Peak cpu usage: 11%
-  Peak memory usage: 6%
+- CPU & Memory Usage:
+  ![CPU Usage Graph](../../../assets/six_windows_cpu.png "Six Concurrent VM CPU Usage")   
+  Peak cpu usage: 6.94%
+  ![Memory Usage Graph](../../../assets/six_windows_memory.png "Six Concurrent VM Memory Usage")   
+  Peak memory usage: 11%
 - Time Taken:  
   - VM 1: 13 minutes 25 seconds  
   - VM 2: 14 minutes 52 seconds  
@@ -157,7 +172,7 @@ As with the CentOS VMs, increasing the number of concurrent migrations increases
 | Concurrent Migrations | Average Time Per VM | VMs per Hour | Peak CPU Usage | Peak Memory Usage |
 |----------------------|---------------------|--------------|----------------|-------------------|
 | 1 VM                 | 10m 19s (619s)      | 5.81         | 8.95%          | 3.2%              |
-| 6 VMs                | 14m 25s (865s)      | 24.97        | 11%            | 6%                |
+| 6 VMs                | 14m 25s (865s)      | 24.97        | 6.94%            | 11%                |
 
 ---
 
