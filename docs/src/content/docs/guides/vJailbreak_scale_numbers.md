@@ -1,18 +1,13 @@
 ---
-title: vJailbreak Scale Numbers
+title: Scalability Analysis
 description: Empirical scale and performance results for vJailbreak migrations.
-date: 2025-05-23
 ---
 
-This document provides a comprehensive overview of vJailbreak migration performance, outlining key assumptions such as network bandwidth, and presenting detailed measurements for both single and multiple VM migrations. It includes analysis of memory, CPU, and network usage at both the node and migration levels, reporting average and peak values. Recommendations are offered for optimal migration agent sizing, along with estimates of the number of concurrent migrations supported per agent. The document also examines how migration time correlates with VM size and identifies the primary factors affecting migration performance, including network capacity, CPU availability, and memory resources.
+### System Requirements
 
-
-
----
-
-### vJailbreak VM Configuration
-
-8 vCPU, 20 GB memory.
+- CPU: 8vCPU's
+- Memory: 16GiB
+- Disk: 20GB
 
 ---
 
