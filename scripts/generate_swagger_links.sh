@@ -12,14 +12,8 @@ title: "API Reference by Version"
 
 EOF
 
-for tag in $(git tag --sort=-creatordate | head -n 3); do
-  cat <<EOL >> $OUTPUT_FILE
-
-## Swagger UI for \\`${tag}\\`
-
-<iframe src="/vjailbreak/swagger-ui/${tag}/" width="100%" height="700" style="border:1px solid #ccc; border-radius:8px; margin-bottom:2rem;"></iframe>
-
-EOL
+for tag in $(git tag --sort=-v:refname | tail -n 3); do
+  echo "- [Swagger UI for \`${tag}\`](/docs/guides/using_apis/${tag})" >> $OUTPUT_FILE
 done
 
 echo "Swagger UI links generated in $OUTPUT_FILE"
