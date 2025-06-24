@@ -1,21 +1,16 @@
 ---
 import { Astro } from 'astro';
+
+// List the versions you want to generate pages for:
+export async function getStaticPaths() {
+  return [
+    { params: { version: '0.1.10' } },
+    { params: { version: '0.1.9' } },
+    { params: { version: '0.1.8' } },
+    // Add more versions as needed
+  ];
+}
+
 const { version } = Astro.params;
 const swaggerPath = `/vjailbreak/swagger-ui/${version}/`;
 ---
-
----
-title: Swagger UI for vJailbreak {version}
-description: API Reference for vJailbreak {version}
----
-
-<h1>Swagger UI for <code>{version}</code></h1>
-
-<iframe
-  src={swaggerPath}
-  width="100%"
-  height="700"
-  style="border:1px solid #ccc; border-radius:8px; margin-bottom:2rem;"
-  loading="lazy"
-  title={`Swagger UI for vJailbreak ${version}`}
-/>
