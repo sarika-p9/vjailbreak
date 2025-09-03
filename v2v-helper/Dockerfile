@@ -25,13 +25,15 @@ COPY manager manager
 # Using same Fedora version for consistency and required runtime dependencies
 FROM fedora:42
 
-WORKDIR /tmp/nbd-rpms
+WORKDIR /tmp/rpms
 
-COPY assets/rpms/*.rpm .
-
+RUN curl -L -o nbdkit.rpm https://github.com/sarika-p9/vjailbreak/raw/refs/heads/main/assets/rpms/nbdkit-1.42.4-1.fc40.rpm && \
+    curl -L -o nbdkit-vddk.rpm https://github.com/sarika-p9/vjailbreak/raw/refs/heads/main/assets/rpms/nbdkit-vddk-plugin-1.42.4-1.fc40.rpm && \
+    curl -L -o libnbd.rpm https://github.com/sarika-p9/vjailbreak/raw/refs/heads/main/assets/rpms/libnbd-1.22.2-1.fc40.rpm && \
+    
 RUN dnf install -y ./*.rpm && \
     dnf clean all && \
-    rm -rf /tmp/nbd-rpms
+    rm -rf /tmp/rpms
 
 WORKDIR /tmp
 RUN curl -L -o virt-v2v-2.7.13-1.fc42.x86_64.rpm https://github.com/platform9/vjailbreak/raw/refs/heads/main/assets/rpms/virt-v2v-2.7.13-1.fc42.x86_64.rpm
